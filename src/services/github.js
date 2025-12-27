@@ -1,5 +1,5 @@
-import { supabase, getCurrentUser } from './supabase';
-import { encryptURL } from '../utils/crypto';
+import { supabase, getCurrentUser } from './supabase.js';
+import { encryptURL } from '../utils/crypto.js';
 
 /**
  * Save a package to Supabase and generate GitHub Pages URL
