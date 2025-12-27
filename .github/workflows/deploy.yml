@@ -1,0 +1,43 @@
+name: Deploy Pex Packages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js (if you need Vite build for .jsx/.js)
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Build project (optional, only if you are building editor itself)
+      - name: Build
+        run: npm run build
+
+      # Step 5: Copy Pex package files to the deployment folder
+      - name: Copy Packages
+        run: |
+          mkdir -p ./packages/$GITHUB_RUN_NUMBER
+          cp -r ./src/editor/packages/* ./packages/$GITHUB_RUN_NUMBER/
+
+      # Step 6: Commit and push changes back to GitHub Pages branch
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages
