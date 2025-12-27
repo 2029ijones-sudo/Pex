@@ -3,10 +3,10 @@ import FileTree from './FileTree';
 import { savePackage } from '../services/github';
 
 /**
- * Editor supporting multiple files, folders, and subfolders
+ * Editor component for creating web packages (.html, .js, .jsx)
  */
 const Editor = ({ user }) => {
-  // files structure: nested folders supported
+  // Initial files structure (nested folders supported)
   const [files, setFiles] = useState({
     'index.html': '<h1>Hello Pex!</h1>',
     'script.js': 'console.log("Hello Pex!");',
@@ -24,11 +24,11 @@ const Editor = ({ user }) => {
     setFileContent(content);
   };
 
-  // Update file content in state
+  // Update file content in state, including nested folders
   const handleContentChange = (e) => {
-    setFileContent(e.target.value);
+    const newContent = e.target.value;
+    setFileContent(newContent);
 
-    // Update nested files properly
     const keys = selectedFilePath.split('/');
     setFiles((prev) => {
       let newFiles = { ...prev };
@@ -37,31 +37,38 @@ const Editor = ({ user }) => {
         pointer[keys[i]] = { ...pointer[keys[i]] };
         pointer = pointer[keys[i]];
       }
-      pointer[keys[keys.length - 1]] = e.target.value;
+      pointer[keys[keys.length - 1]] = newContent;
       return newFiles;
     });
   };
 
-  // Save package to Supabase/GitHub
+  // Save the current package (supports .html, .js, .jsx files)
   const handleSave = async () => {
     try {
       const packageName = prompt('Enter package name:');
+      if (!packageName) return alert('Package name is required.');
+
       const isPrivate = confirm('Make this package private?');
+      // savePackage handles storing files, generating URLs, encrypting if private
       const url = await savePackage(files, packageName, isPrivate);
+
       alert(`Package saved! URL: ${url}`);
     } catch (err) {
-      alert('Error saving package: ' + err.message);
       console.error(err);
+      alert('Error saving package: ' + err.message);
     }
   };
 
   return (
     <div className="flex w-full h-full">
+      {/* File tree panel */}
       <FileTree
         files={files}
         onSelectFile={handleSelectFile}
         selectedFilePath={selectedFilePath}
       />
+
+      {/* Editor panel */}
       <div className="flex-1 p-4 flex flex-col">
         <textarea
           className="w-full h-full border p-2 flex-1"
