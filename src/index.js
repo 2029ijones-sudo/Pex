@@ -1,7 +1,7 @@
 // src/index.js
 
-import { initSupabase, getCurrentUser } from './services/supabase';
-import { loadEditor } from './editor/Editor'; // assuming Editor exposes a function to mount itself
+import { initSupabase, getCurrentUser } from './services/supabase.js';
+import { loadEditor } from './editor/Editor.js'; // assuming Editor exposes a function to mount itself
 
 // Grab root div
 const rootElement = document.getElementById('root');
