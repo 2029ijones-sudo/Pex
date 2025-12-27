@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
 import FileTree from './FileTree';
 import { savePackage } from '../services/github';
 
@@ -49,7 +50,6 @@ const Editor = ({ user }) => {
       if (!packageName) return alert('Package name is required.');
 
       const isPrivate = confirm('Make this package private?');
-      // savePackage handles storing files, generating URLs, encrypting if private
       const url = await savePackage(files, packageName, isPrivate);
 
       alert(`Package saved! URL: ${url}`);
@@ -61,14 +61,11 @@ const Editor = ({ user }) => {
 
   return (
     <div className="flex w-full h-full">
-      {/* File tree panel */}
       <FileTree
         files={files}
         onSelectFile={handleSelectFile}
         selectedFilePath={selectedFilePath}
       />
-
-      {/* Editor panel */}
       <div className="flex-1 p-4 flex flex-col">
         <textarea
           className="w-full h-full border p-2 flex-1"
@@ -85,5 +82,11 @@ const Editor = ({ user }) => {
     </div>
   );
 };
+
+// Expose a mount function for plain JS usage
+export function mountEditor(container, user) {
+  const root = ReactDOM.createRoot(container);
+  root.render(<Editor user={user} />);
+}
 
 export default Editor;
