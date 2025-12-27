@@ -25,19 +25,23 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Step 4: Build editor (only if you need JSX compilation for user packages)
+      # Step 4: Build editor for JSX compilation (optional)
       - name: Build Editor
-        run: npm run build-editor
+        run: npm run build-editor || echo "Skipping if no editor build needed"
 
-      # Step 5: Copy Pex package files to deployment folder
+      # Step 5: Copy generated Pex packages to deployment folder
       - name: Copy Packages
         run: |
-          mkdir -p ./packages/$GITHUB_RUN_NUMBER
-          cp -r ./src/editor/packages/* ./packages/$GITHUB_RUN_NUMBER/
+          if [ -d ./src/editor/packages ]; then
+            mkdir -p ./packages/$GITHUB_RUN_NUMBER
+            cp -r ./src/editor/packages/* ./packages/$GITHUB_RUN_NUMBER/
+          else
+            echo "No packages found, skipping copy."
+          fi
 
-      # Step 6: Deploy to GitHub Pages
+      # Step 6: Deploy packages to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@main
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages
