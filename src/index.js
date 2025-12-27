@@ -1,14 +1,12 @@
 // src/index.js
+import { initSupabase } from './services/supabase.js';
+import Editor from './editor/Editor.js'; // default export
 
-import { initSupabase, getCurrentUser } from './services/supabase.js';
-import { loadEditor } from './editor/Editor.js'; // assuming Editor exposes a function to mount itself
-
-// Grab root div
+// Grab the root div
 const rootElement = document.getElementById('root');
 
-// Initialize your app
 (async function initApp() {
-  // Example: fetch user
+  // Initialize Supabase and get the current user
   const user = await initSupabase();
 
   if (!user) {
@@ -16,7 +14,7 @@ const rootElement = document.getElementById('root');
     return;
   }
 
-  // Clear root
+  // Clear root content
   rootElement.innerHTML = '';
 
   // Create header
@@ -36,6 +34,6 @@ const rootElement = document.getElementById('root');
   main.style.height = 'calc(100vh - 60px)';
   rootElement.appendChild(main);
 
-  // Load your editor inside main
-  loadEditor(main, user); // assume Editor.js exposes this
+  // Mount the editor using its default export directly
+  Editor(main, user); // Editor internally handles React rendering
 })();
