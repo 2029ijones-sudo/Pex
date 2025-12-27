@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import FileTree from './FileTree';
-import { savePackage } from '../services/github';
+import FileTree from './FileTree.js';
+import { savePackage } from '../services/github.js';
 
 /**
  * Editor component for creating web packages (.html, .js, .jsx)
