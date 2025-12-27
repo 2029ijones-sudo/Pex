@@ -4,10 +4,9 @@
   "description": "Pex - Web Package Creator & Host",
   "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "echo 'This project does not require react-scripts start. Open index.html directly.'",
+    "build-editor": "react-scripts build",
+    "test": "echo 'No tests configured.'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
