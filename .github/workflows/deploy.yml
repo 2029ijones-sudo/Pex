@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # Step 2: Setup Node.js (if you need Vite build for .jsx/.js)
+      # Step 2: Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -25,17 +25,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Step 4: Build project (optional, only if you are building editor itself)
-      - name: Build
-        run: npm run build
+      # Step 4: Build editor (only if you need JSX compilation for user packages)
+      - name: Build Editor
+        run: npm run build-editor
 
-      # Step 5: Copy Pex package files to the deployment folder
+      # Step 5: Copy Pex package files to deployment folder
       - name: Copy Packages
         run: |
           mkdir -p ./packages/$GITHUB_RUN_NUMBER
           cp -r ./src/editor/packages/* ./packages/$GITHUB_RUN_NUMBER/
 
-      # Step 6: Commit and push changes back to GitHub Pages branch
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@main
         with:
